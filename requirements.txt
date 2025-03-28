@@ -1,0 +1,9 @@
+streamlit
+yfinance
+pandas
+matplotlib
+scikit-learn
+seaborn
+newsapi-python
+textblob
+numpy
