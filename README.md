@@ -6,6 +6,9 @@ The **Stock Analyzer** project is a **Streamlit** application designed to analyz
 ## 📂 File Structure
 - `app.py`: Main Streamlit application file.
 - `requirements.txt`: List of dependencies.
+- `README.md`: Documentation of the project.
+- `.gitignore`: Specifies intentionally untracked files to ignore.
+
 
 ## 🛠️ Setup Instructions
 
