@@ -31,9 +31,10 @@ ticker = st.selectbox("Select a stock ticker:", top_100_stocks)
 start_date = st.date_input("Start Date", pd.to_datetime('2020-01-01'))
 end_date = st.date_input("End Date", pd.to_datetime('today'))
 
+TOKEN = st.secrets["TOKEN"]
 @st.cache_resource
 def load_sentiment_model():
-    return pipeline("sentiment-analysis")
+    return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english", use_auth_token=TOKEN)
 
 sentiment_model = load_sentiment_model()
 
