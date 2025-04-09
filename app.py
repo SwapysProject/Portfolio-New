@@ -9,6 +9,11 @@ from textblob import TextBlob
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
+from transformers import pipeline
+from datetime import datetime
+import plotly.express as px
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.ensemble import RandomForestRegressor
 
 st.title("Indian Stock Analyzer")
 
