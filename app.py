@@ -12,17 +12,10 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 st.title("Stock Analyzer")
 
-# List of Top 100 Indian Stocks
-top_100_stocks = [
-    "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "HINDUNILVR.NS", "ICICIBANK.NS",
-    "KOTAKBANK.NS", "BHARTIARTL.NS", "ITC.NS", "AXISBANK.NS", "BAJFINANCE.NS",
-    "ASIANPAINT.NS", "HCLTECH.NS", "MARUTI.NS", "LT.NS", "SBIN.NS", "ULTRACEMCO.NS",
-    "M&M.NS", "SUNPHARMA.NS", "WIPRO.NS", "ONGC.NS", "POWERGRID.NS", "NTPC.NS",
-    "INDUSINDBK.NS", "BAJAJFINSV.NS", "TITAN.NS", "NESTLEIND.NS", "JSWSTEEL.NS",
-    "HDFC.NS", "COALINDIA.NS", "DRREDDY.NS", "TATAMOTORS.NS", "BPCL.NS"
-]
+df = pd.read_csv('indian_stocks.csv')
+top_stocks = df['symbol'].tolist()
+ticker = st.selectbox("Select a stock ticker:", top_stocks)
 
-ticker = st.selectbox("Select a stock ticker:", top_100_stocks)
 start_date = st.date_input("Start Date", pd.to_datetime('2020-01-01'))
 end_date = st.date_input("End Date", pd.to_datetime('today'))
 
