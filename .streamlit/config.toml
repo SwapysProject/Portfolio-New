@@ -1,7 +1,7 @@
 [theme]
 base = "dark"                 # Options: "light" or "dark"
 primaryColor = "#00BFFF"      # Accent color (buttons, sliders, etc.)
-backgroundColor = "#06123e"   # App background
+backgroundColor = "#040818"   # App background
 secondaryBackgroundColor = "#262730"  # Sidebar and widgets
 textColor = "#FAFAFA"         # Text color
 font = "sans serif"           # Options: "sans serif", "serif", "monospace"
