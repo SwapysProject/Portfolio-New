@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-st.title("Stock Analyzer")
+st.title("Indian Stock Analyzer")
 
 # List of Top 100 Indian Stocks
 top_100_stocks = [
@@ -25,6 +25,12 @@ top_100_stocks = [
 ticker = st.selectbox("Select a stock ticker:", top_100_stocks)
 start_date = st.date_input("Start Date", pd.to_datetime('2020-01-01'))
 end_date = st.date_input("End Date", pd.to_datetime('today'))
+
+@st.cache_resource
+def load_sentiment_model():
+    return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+
+sentiment_model = load_sentiment_model()
 
 if st.button("Fetch Data") and ticker:
     def fetch_data(ticker):
@@ -159,36 +165,48 @@ if st.button("Fetch Data") and ticker:
             sort_by='publishedAt',
             from_param=from_date, 
             to=to_date,
-            page_size=5
+            page_size=20
         )
 
         news_list = []
-        sentiments = {'Positive': 0, 'Negative': 0, 'Neutral': 0}
+        sentiments = {'Positive': 0, 'Negative': 0}
+        sentiment_trend = []
 
         if articles['status'] == 'ok' and articles['totalResults'] > 0:
             for article in articles['articles']:
                 title = article['title']
                 description = article['description']
                 url = article['url']
+                published_at = article['publishedAt']
 
-                analysis = TextBlob(title + " " + description)
-                sentiment = analysis.sentiment.polarity
-                sentiment_type = 'Positive' if sentiment > 0 else 'Negative' if sentiment < 0 else 'Neutral'
+                result = sentiment_model(title + " " + description)[0]
+                label = result['label']
+                sentiment_type = 'Positive' if label == 'POSITIVE' else 'Negative'
 
                 sentiments[sentiment_type] += 1
                 news_list.append((title, sentiment_type, url))
 
+                sentiment_trend.append({
+                    'date': pd.to_datetime(published_at),
+                    'sentiment': sentiment_type
+                })
+
             st.write("### Sentiment Summary")
             st.write(f"Positive: {sentiments['Positive']}")
             st.write(f"Negative: {sentiments['Negative']}")
-            st.write(f"Neutral: {sentiments['Neutral']}")
+
+            sentiment_df = pd.DataFrame(sentiment_trend)
+            sentiment_df['date'] = sentiment_df['date'].dt.date
+            sentiment_counts = sentiment_df.groupby(['date', 'sentiment']).size().reset_index(name='count')
+            fig = px.bar(sentiment_counts, x='date', y='count', color='sentiment', barmode='group',
+                         title='Sentiment Trend Over Time')
+            st.plotly_chart(fig)
 
             for i, (title, sentiment, url) in enumerate(news_list, 1):
                 st.write(f"{i}. {title[:75]}... - {sentiment}")
                 st.write(f"[Read more]({url})")
         else:
             st.write("No recent news available.")
-
 
          # Prepare Data for Prediction
         st.subheader("Predictive Modeling - Linear Regression")
