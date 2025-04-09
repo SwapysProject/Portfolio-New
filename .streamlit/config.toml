@@ -4,4 +4,4 @@ primaryColor = "#00BFFF"      # Accent color (buttons, sliders, etc.)
 backgroundColor = "#040818"   # App background
 secondaryBackgroundColor = "#383a3d"  # Sidebar and widgets
 textColor = "#FAFAFA"         # Text color
-font = "monospace"           # Options: "sans serif", "serif", "monospace"
+font = "serif"           # Options: "sans serif", "serif", "monospace"
