@@ -33,7 +33,7 @@ end_date = st.date_input("End Date", pd.to_datetime('today'))
 
 @st.cache_resource
 def load_sentiment_model():
-    return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+    return pipeline("sentiment-analysis")
 
 sentiment_model = load_sentiment_model()
 
