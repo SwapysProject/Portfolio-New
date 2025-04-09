@@ -2,6 +2,6 @@
 base = "dark"                 # Options: "light" or "dark"
 primaryColor = "#00BFFF"      # Accent color (buttons, sliders, etc.)
 backgroundColor = "#040818"   # App background
-secondaryBackgroundColor = "#4d4f54"  # Sidebar and widgets
+secondaryBackgroundColor = "#383a3d"  # Sidebar and widgets
 textColor = "#FAFAFA"         # Text color
 font = "sans serif"           # Options: "sans serif", "serif", "monospace"
