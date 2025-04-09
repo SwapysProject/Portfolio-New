@@ -7,8 +7,3 @@ seaborn
 newsapi-python
 textblob
 numpy
-transformers
-torch
-accelerate
-plotly
-statsmodels
