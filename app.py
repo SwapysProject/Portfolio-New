@@ -50,22 +50,33 @@ if st.button("Fetch Data") and ticker:
         sharpe_ratio = np.sqrt(252) * (excess_return.mean() / excess_return.std())
 
         st.subheader("Fundamental Analysis")
-        ticker_info = yf.Ticker(ticker).info
+        try:
+            ticker_obj = yf.Ticker(ticker)
+            ticker_info = ticker_obj.info if ticker_obj.info else {}
+        except Exception as e:
+            st.error(f"Failed to retrieve data for ticker '{ticker}': {e}")
+            ticker_info = {}
+
         fundamentals = {
-                "Market Cap": ticker_info.get("marketCap", "N/A"),
-                "PE Ratio (TTM)": ticker_info.get("trailingPE", "N/A"),
-                "PB Ratio": ticker_info.get("priceToBook", "N/A"),
-                "Sharpe Ratio": f"{sharpe_ratio:.2f}",
-                "Dividend Yield": ticker_info.get("dividendYield", "N/A"),
-                "52-Week High": ticker_info.get("fiftyTwoWeekHigh", "N/A"),
-                "52-Week Low": ticker_info.get("fiftyTwoWeekLow", "N/A"),
-                "Beta": ticker_info.get("beta", "N/A"),
-                "EPS (TTM)": ticker_info.get("trailingEps", "N/A"),
-                "Revenue (TTM)": ticker_info.get("totalRevenue", "N/A"),
-                "Profit Margins": ticker_info.get("profitMargins", "N/A")
-            }
+            "Market Cap": ticker_info.get("marketCap", "N/A"),
+            "PE Ratio (TTM)": ticker_info.get("trailingPE", "N/A"),
+            "PB Ratio": ticker_info.get("priceToBook", "N/A"),
+            "Sharpe Ratio": f"{sharpe_ratio:.2f}" if 'sharpe_ratio' in locals() else "N/A",
+            "Dividend Yield": ticker_info.get("dividendYield", "N/A"),
+            "52-Week High": ticker_info.get("fiftyTwoWeekHigh", "N/A"),
+            "52-Week Low": ticker_info.get("fiftyTwoWeekLow", "N/A"),
+            "Beta": ticker_info.get("beta", "N/A"),
+            "EPS (TTM)": ticker_info.get("trailingEps", "N/A"),
+            "Revenue (TTM)": ticker_info.get("totalRevenue", "N/A"),
+            "Profit Margins": ticker_info.get("profitMargins", "N/A")
+        }
+
         fundamentals_df = pd.DataFrame(fundamentals.items(), columns=["Metric", "Value"])
+        
+        st.subheader("Fundamental Analysis")
         st.table(fundamentals_df)
+
+
 
         data['Cumulative Return'] = (1 + data['Daily Return']).cumprod()
         data['20 Day MA'] = data[price_col].rolling(window=20).mean()
